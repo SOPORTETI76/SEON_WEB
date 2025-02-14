@@ -1,0 +1,14 @@
+# Archivos de Python
+__pycache__
+
+# Archivos de entorno virtual
+venv
+
+# querys
+query's
+
+# Configuración de entorno local
+.env
+
+#db firebird
+pacos.fdb

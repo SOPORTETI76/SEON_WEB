@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="{% static 'CSS/herramientas.css' %}">
+        <title>Document</title>
+    </head>
+    <body>
+        <div>
+            <nav>MENU</nav>
+        </div>
+        <main>
+            <div class="menu-cont-img">
+                <a href="{% url 'pedidos' %}"><img src="{% static 'ICONS/menu/pedidos.png' %}" ></a>
+            </div>
+            <div class="menu-cont-img">
+                <a href="#"><img src="{% static 'ICONS/menu/usuarios.png' %}" ></a>
+            </div>
+            <div class="menu-cont-img">
+                <a href="{% url 'pedidos' %}"><img src="{% static 'ICONS/menu/pedidos.png' %}" ></a>
+            </div>
+            <div class="menu-cont-img">
+                <a href="#"><img src="{% static 'ICONS/menu/usuarios.png' %}" ></a>
+            </div>
+            <div class="menu-cont-img">
+                <a href="{% url 'pedidos' %}"><img src="{% static 'ICONS/menu/pedidos.png' %}" ></a>
+            </div>
+            <div class="menu-cont-img">
+                <a href="#"><img src="{% static 'ICONS/menu/usuarios.png' %}" ></a>
+            </div>
+            <div class="menu-cont-img">
+                <a href="{% url 'pedidos' %}"><img src="{% static 'ICONS/menu/pedidos.png' %}" ></a>
+            </div>
+            <div class="menu-cont-img">
+                <a href="#"><img src="{% static 'ICONS/menu/usuarios.png' %}" ></a>
+            </div>
+        </main>
+        <footer>
+            <a href="{% url 'logout' %}"><button id="btn-sal" class="btn-all btn-out" type="button">SALIR</button></a>
+        </footer>
+    </body>
+</html>

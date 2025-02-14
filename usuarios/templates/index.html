@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/index.css' %}"/>
+    <meta charset="UTF-8">
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login SEON</title>
+</head>
+<body>
+    <div class="contenedor-main">
+        <div class="cont-img">
+            <img id="img-login" src="{% static 'IMG/productos_pacos.png' %}" alt="..."/>
+        </div>
+        <div class="cont-form">
+            <p class="logo-seon">BIENVENIDO</p>
+            <form method="POST">
+                {% csrf_token %}
+                {% if errordb %}
+                    <div class="errors">
+                        {{ errordb }}
+                    </div>
+                {% endif %}
+                {% if form.errors %}
+                    {% if form.usuario.errors %}
+                        <div class="errors">
+                            {% for error in form.usuario.errors %}
+                                {{ error }} (usuario)
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    {% if form.clave.errors %}
+                        <div class="errors">
+                            {% for error in form.clave.errors %}
+                                    {{ error }} (clave)
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endif %}
+                {{ form.usuario }}
+                {{ form.clave }}
+                <button type="submit" class="btn-log">INGRESAR</button>
+            </form>
+            <a href="https://productoslacteospacos.com/?v=7f0c663dc5fa">Visita pacos</a>
+        </div>
+    </div>
+    <script src="{% static 'JS/index.js'%}"></script>
+</body>
+</html>

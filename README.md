@@ -1,0 +1,3 @@
+# Comentarios
+
+en este punto de la aplicacion DJANGO, no se está utilizando el ORM, ya que no cuenta con soporte para la base de datos FIREBIRD, entonces se diseño la clase para controlar la conexion y ejecucion de consultas con firebird en la carpeta core, adicional para la conexion a la base de datos se leen variables de entorno, para desarrollo estan definidas en el archivo .env, pero para produccion el servidor deberia proporcionarlas

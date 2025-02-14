@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/pedidos.css' %}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <title>Pedidos</title>
+</head>
+<body>
+    <div class="contenedor-principal">
+        <h2>DETALLES PEDIDO</h2>
+        <img src="{% static 'IMG/logo_pacos.png' %}" alt="..."/>
+        <h4 class="user-name">{{ usuario }}</h4>
+        <button id="btnMisPedidos" class="btn-all btn-modal" type="button">MIS PEDIDOS</button>
+        <form id="form-pedidos" method="POST">
+            <hr>
+            {% csrf_token %}
+            <input type="hidden" id="id_pedido" name="id_pedido" value="">
+            {% if form.errors %}
+                <div class="cont-error">
+                    Corrija los campos (
+                    {% for error in form.errors%}
+                        {{ error }}
+                    {% endfor %}
+                    )
+                </div>
+            {% endif %}
+            {% if error %}
+                <div class="cont-error">
+                    {{ error }}
+                </div>
+            {% endif %}
+            {{ form.fecha }}
+            {{ form.terceros }}
+            <div class="custom-dropdown">
+                <div id="tercero-list" class="dropdown-list">
+                    <!--opciones-->
+                </div>
+            </div>
+            <hr>
+            {{ form.productos }}
+            <div class="custom-dropdown">
+                <div id="producto-list" class="dropdown-list">
+                    <!--opciones-->
+                </div>
+            </div>
+            <div class="opc-productos">
+                {{ form.cantidad }}
+                <button title="Agregar producto" id="btn-productos" class="btn-productos" type="button">+</button>
+            </div>
+            <h4 id="prod-ter-sel" >Productos seleccionados:</h4>
+            <div title="-> pedido-cantidad-producto <-" id="productos-selecionados" class="productos-tercero" data-img-url="{% static 'IMG/delete.png' %}" hidden>
+                <!--Productos seleccionados-->
+            </div>
+            <h4 id="ped-ter-reg" >Pedidos registrados:</h4>
+            <div title="informacion (#pedido,cantidad,producto,orden)" id="pedidos-hechos" class="productos-tercero" hidden>
+                <!--Pedidos realizados anteiormente-->
+            </div>
+            <hr>
+            {{ form.orden_compra }}
+            {{ form.observacion }}
+            <div class="cont-btns">
+                <button id="btn-reg" type="submit" class="btn-all btn-pedido" name="accion" value="reg" style="display: none;">REGISTRAR</button>
+                <button id="btn-act" type="submit" class="btn-all btn-pedido" name="accion" value="act" style="display: none;">ACTUALIZAR</button>
+                <a id="logout" href="{% url 'logout' %}" style="display: none;"><button id="btn-sal" class="btn-all btn-out" type="button"">CERRAR SESION</button></a>
+                <button id="btn-canc" type="button" class="btn-all btn-out" style="display: none;">CANCELAR</button>
+            </div>
+        </form>
+    </div>
+    <dialog id="modalPedidos" class="ventana-modal" close>
+        <div class="contenido-modal">
+            <div class="modal-header">
+                <h2>Mis Pedidos</h2>
+                <button id="cerrarModal" class="btn-modal-cerrar" type="button">X</button>
+                <input id="buscar-pedido" type="search" placeholder="Buscar pedido (consecutivo:tercero:producto)" class="input-busqueda" autocomplete="off" name="off">
+            </div>
+            <div class="modal-body">
+                <table id="tablaPedidos" class="tabla-pedidos">
+                    <thead id="thead-pedidos">
+                    </thead>
+                    <tbody id="tbody-pedidos">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </dialog>
+    <dialog id="modalOpciones" class="ventana" close></dialog>
+    <script type="application/json" id="terceros-data">{{ li_terceros|safe }}</script>
+    <script type="aplication/json" id="productos-data">{{ li_productos|safe }}</script>
+    <!--Flatpickr-->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+    <!-- SweetAlert2 CSS y JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{% static 'JS/pedidos.js' %}"></script>
+</body>
+</html>
