@@ -1,6 +1,6 @@
 # Archivos de Python
 __pycache__
-comerciales/static/pedidosOld.js
+comerciales/static/JS/pedidosOld.js
 
 # Archivos de entorno virtual
 venv

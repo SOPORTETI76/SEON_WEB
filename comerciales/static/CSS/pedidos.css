@@ -300,7 +300,7 @@ hr{
     word-wrap: break-word;
     border-collapse: collapse;
 }
-.tabla-pedidos thead tr{
+.tabla-pedidos tr th{
     background-color: rgb(238, 128, 26);
     border-bottom-color: white;
     border-bottom-style: solid;
@@ -330,6 +330,8 @@ tr:nth-child(even){
     }
     .tr-small-head .th-small{
         border-style: none;
+        background-color: rgb(254, 131, 42);
+        width: 100%;
     }
     .tr-small-body .th-small{
         display: grid;

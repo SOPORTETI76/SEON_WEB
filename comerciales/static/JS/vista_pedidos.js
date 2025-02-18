@@ -24,10 +24,8 @@ let cuerpo_tabla=document.getElementById("tbody-pedidos")
 let cabecera_tabla=document.getElementById("thead-pedidos")
 let input_busqueda_pedidos=document.getElementById("buscar-pedido")
 let btn_cerrar_modal=document.getElementById("cerrarModal")
-let data_terceros={}
-let lista_terceros=[]
-let data_productos={}
-let lista_productos=[]
+let data_terceros
+let data_productos
 let pedidos_comercial=[]
 
 //--------------------------- CARGAS INICIALES
@@ -439,7 +437,7 @@ function mostrar_pedidos(){
 
 //Pinta una vista de escritorio para los pedidos
 function pedidos_vista_escritorio(){
-    cuerpo_tabla.innerHTML+=`<tr>
+    cuerpo_tabla.innerHTML+=`<tr class='tr-large-head'>
                         <th>Id Pedido</th>
                         <th>Cliente</th>
                         <th>Producto</th>
