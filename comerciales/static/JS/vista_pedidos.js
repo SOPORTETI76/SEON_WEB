@@ -237,7 +237,7 @@ function seleccionar_productos(){
     cont.setAttribute("class","dat-productos")
     cont.innerHTML=`
         <input min="1" max="999" class="input-cant-productos" type="number" style="grid-column-start:1;" value="${cantidad.value}">
-        <p id="${producto.value}" class="nombre-producto" style="grid-column-start:2;margin:0;">${producto.value.split("-")[1]}</p>
+        <p id="${producto.value}" class="nombre-producto" style="grid-column-start:2;">${producto.value.split("-")[1]}</p>
     `
     boton.type="button"
     boton.title="eliminar producto"

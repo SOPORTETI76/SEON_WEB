@@ -248,8 +248,7 @@ hr{
 .nombre-producto{
     align-self: center;
     justify-self: start;
-    margin-left: 1px;
-    margin-right: 9px;
+    margin-right: 6px;
 }
 /*Ventana modal*/
 .btn-modal{
@@ -300,7 +299,7 @@ hr{
     word-wrap: break-word;
     border-collapse: collapse;
 }
-.tabla-pedidos tr th{
+.tabla-pedidos .tr-large-head{
     background-color: rgb(238, 128, 26);
     border-bottom-color: white;
     border-bottom-style: solid;
