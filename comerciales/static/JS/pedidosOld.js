@@ -25,12 +25,13 @@ document.addEventListener("DOMContentLoaded", function() {
     const dropdownPro = document.getElementById("producto-list");
     let misPedidos=[]
 
-
+    //X
     campoFecha()
     estadoInicial()
     verificar_ProPed()
     cargar_pedidos()
 
+    //X
     try{
         tercerosData=JSON.parse(tercerosData.textContent);
         productosData=JSON.parse(productosData.textContent);
@@ -56,6 +57,7 @@ document.addEventListener("DOMContentLoaded", function() {
         console.error("Error al parsear o generar la lista de terceros:", error);
     };
 
+    //X
     function campoFecha(){
         flatpickr(".datepicker", {
             dateFormat: "Y-m-d", // Formato compatible con Django
@@ -69,8 +71,14 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
+    //X
     function estadoInicial(){
         let inputFecha=form.querySelector(".datepicker");
+        let hpedter=form.querySelector("#ped-ter-reg")
+        pedi_terceros.innerHTML=""
+        prod_terceros.innerHTML=""
+        pedi_terceros.setAttribute("style","display:none;")
+        hpedter.setAttribute("style","display:none;")
         inputPedido.value="";
         inputTerceros.value="";
         form.querySelector("#id_productos").value="";
@@ -81,6 +89,7 @@ document.addEventListener("DOMContentLoaded", function() {
         estadoFormulario()
     }
 
+    //X
     function tercerosLista(){
         const termino=inputTerceros.value.toLowerCase();
         dropdownTer.innerHTML='';
@@ -88,7 +97,6 @@ document.addEventListener("DOMContentLoaded", function() {
             dropdownTer.style.display="none";
             return;
         }
-
         Object.entries(tercerosData).forEach(([Key,value])=>{
             listaTerceros.push(value)
             if(value.toLowerCase().includes(termino)){
@@ -97,6 +105,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 opcion.dataset.value=Key;
                 opcion.addEventListener("click",function(){
                     inputTerceros.value=opcion.textContent;
+                    pedidosXTerceros(opcion.textContent)
                     dropdownTer.style.display="none";
                 });
                 dropdownTer.appendChild(opcion);
@@ -105,6 +114,7 @@ document.addEventListener("DOMContentLoaded", function() {
         dropdownTer.style.display=dropdownTer.children.length ? "block":"none";
     };
 
+    //X
     function productosLista(){
         const termino=inputProductos.value.toLowerCase();
         dropdownPro.innerHTML='';
@@ -128,6 +138,7 @@ document.addEventListener("DOMContentLoaded", function() {
         dropdownPro.style.display=dropdownPro.children.length ? "block":"none";
     };
 
+    //X
     function mostrar_pedidos(){
         inputPedido.value="";
         tbody.innerHTML='<tr id="sin-pedidos" hidden><th><h3>no se encontraron pedidos</h3></th></tr>'
@@ -136,6 +147,7 @@ document.addEventListener("DOMContentLoaded", function() {
         modalPedidos.showModal()
     }
 
+    //X
     function capturar_pedido(){
         let seleccionados=prod_terceros.querySelectorAll(".dat-productos")
         let fecha=form.querySelector(".datepicker").value
@@ -179,6 +191,7 @@ document.addEventListener("DOMContentLoaded", function() {
         return []
     }
 
+    //X
     function validar_pedido(seleccionados,fecha,cliente){
         if(seleccionados.length===0){
             Swal.fire({
@@ -208,9 +221,9 @@ document.addEventListener("DOMContentLoaded", function() {
             return false
         }
         return true
-
     }
 
+    //X
     function registrar_pedidos(pedidos){
         fetch("/registrar_pedidos/",{
             method:"POST",
@@ -244,7 +257,8 @@ document.addEventListener("DOMContentLoaded", function() {
             console.error("error al registrar pedidos: ",error)
         })
     }
-
+    
+    //X
     function validar_actualizacion(fecha,producto,cantidad,consecutivo){
         let flagFecha=fecha===""
         let flagProducto=producto===""
@@ -264,6 +278,7 @@ document.addEventListener("DOMContentLoaded", function() {
         return false
     }
 
+    //X
     function actualizar_pedido(){
         let fecha=form.querySelector(".datepicker").value
         let producto=form.querySelector("#id_productos").value.split("-")[0]
@@ -306,6 +321,7 @@ document.addEventListener("DOMContentLoaded", function() {
         })
     }
 
+    //X
     function pedidos_escritorio(){
         thead.innerHTML=`<tr>
                             <th>Id Pedido</th>
@@ -340,6 +356,7 @@ document.addEventListener("DOMContentLoaded", function() {
         })
     }
     
+    //X
     function pedidos_movil(){
         thead.innerHTML="<tr class='tr-small-head'><th class='th-small'>Informacion</th></tr>"
         misPedidos.forEach(pedido=>{
@@ -371,6 +388,7 @@ document.addEventListener("DOMContentLoaded", function() {
         })
     }
 
+    //X
     function filtrarPedidos(){
         const contenido=tbody.querySelectorAll("tr");
         const query=bpedido.value.toLowerCase();
@@ -390,6 +408,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     };
 
+    //X
     function buscarPedido(pedidoId){
         fetch('/buscar_pedido/'+pedidoId+'/').then(response=>response.json()).then(
             pedido=>{
@@ -411,6 +430,7 @@ document.addEventListener("DOMContentLoaded", function() {
         ).catch(error =>console.error("Error: ",error))
     }
 
+    //X
     async function eliminarPedido(pedidoId){
         modalPedidos.close()
         let flag= await Swal.fire({
@@ -450,6 +470,8 @@ document.addEventListener("DOMContentLoaded", function() {
         )
     }
 
+
+    //X
     function cancelarEditar(){
         inputPedido.value=''
         inputTerceros.value="";
@@ -464,6 +486,7 @@ document.addEventListener("DOMContentLoaded", function() {
         estadoFormulario();
     }
 
+    //X
     function estadoFormulario(){
         if(inputPedido.value!==""){
             btnProductos.disabled=true
@@ -476,7 +499,7 @@ document.addEventListener("DOMContentLoaded", function() {
             btnSal.setAttribute("style","display: none;");
             btnAct.setAttribute("style","");
             btnCan.setAttribute("style","");
-            
+            verificar_ProPed()     
         }else{
             btnProductos.disabled=false  
             btnProductos.removeAttribute("style")
@@ -491,10 +514,12 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
+    //X
     function getCSRFToken(){
         return document.querySelector('[name=csrfmiddlewaretoken]').value;
     }
 
+    //X
     function agregarProducto(){
         let prodVacio=inputProductos.value.trim()===""
         let cantInvalida=inputCantidad.value<=0
@@ -540,59 +565,102 @@ document.addEventListener("DOMContentLoaded", function() {
         verificar_ProPed()
     }
 
-    function pedidosXTerceros(){
-        let inputFecha=form.querySelector(".datepicker");
-        requestAnimationFrame(()=>{
-            pedi_terceros.innerHTML=""
-            if(misPedidos){
-                misPedidos.forEach(pedido=>{
-                    let fechaFlag=pedido.fecha.trim()===inputFecha.value.trim()
-                    let terceroFlag=pedido.tercero.trim()===inputTerceros.value.split(":")[1].trim()
-                    if(fechaFlag && terceroFlag){
-                        let contenedor=document.createElement("div")
-                        contenedor.setAttribute("class","dat-pedidos")
-                        contenedor.innerHTML=`
-                            <p class="temp-cant">${pedido.cantidad}</p>
-                            <p class="temp-producto">${pedido.producto.split("-")[1]}</p>
-                            <p class="consecutivo-pedido">${pedido.id}</p>
-                        `
-                        pedi_terceros.appendChild(contenedor)
-                    }
+    //X
+    function pedidosXTerceros(tercero){
+        let inputFecha=form.querySelector(".datepicker")
+        pedi_terceros.innerHTML=""
+        if(misPedidos){
+            misPedidos.forEach(pedido=>{
+                let fechaFlag=pedido.fecha.trim()===inputFecha.value.trim()
+                let terceroFlag=pedido.tercero.trim()===tercero.split(":")[1].trim()
+                if(fechaFlag && terceroFlag){
+                    let contenedor=document.createElement("div")
+                    contenedor.setAttribute("class","dat-pedidos")
+                    contenedor.innerHTML=`
+                        <p class="temp-cant">${pedido.cantidad}</p>
+                        <p class="temp-producto">${pedido.producto.split("-")[1]}</p>
+                        <p class="consecutivo-pedido">${pedido.id}</p>
+                    `
+                    pedi_terceros.appendChild(contenedor)
+                }
             })
-            }
-            verificar_ProPed()
-        })
+        }
+        verificar_ProPed()
     }
 
+    //X
     function verificar_ProPed(){
-        let hproter=document.getElementById("prod-ter-sel")
-        let hpedter=document.getElementById("ped-ter-reg")
+        let hpedter=form.querySelector("#ped-ter-reg")
+        let hproter=form.querySelector("#prod-ter-sel")
+        if(pedi_terceros.innerHTML!==""){
+            hpedter.removeAttribute("style")
+            pedi_terceros.removeAttribute("style")
+        }else{
+            hpedter.setAttribute("style","display:none;")
+            pedi_terceros.setAttribute("style","display:none;")
+        }
         if(prod_terceros.childElementCount>0){
-            hproter.style.display="block"
+            hproter.removeAttribute("style")
             prod_terceros.style.display="block"
         }else{
-            hproter.style.display="none"
+            hproter.setAttribute("style","display:none;")
             prod_terceros.style.display="none"
-        }
-        if(pedi_terceros.childElementCount>0){
-            hpedter.style.display="block"
-            pedi_terceros.style.display="block"
-        }else{
-            hpedter.style.display="none"
-            pedi_terceros.style.display="none"
         }
     }
 
+    //X
     function cargar_pedidos(){
         fetch("/todos_pedidos/").then(response=>response.json()).then(
             data=>{misPedidos=data}
         ).catch(error=>Swal.fire({title:"Error",text:`Ocurrio un error al buscar los pedidos: ${error}`,icon:"error",showConfirmButton:false,timer:1300}))
     }
 
-    inputTerceros.addEventListener("change",pedidosXTerceros)
+    //X
+    btnSal.addEventListener("click",function(e){
+        e.preventDefault()
+        if(prod_terceros.childElementCount>0){
+            Swal.fire({
+                title:"Advertencia",
+                text:"Aun tiene productos seleccionados, ¿desea registrarlos?",
+                icon:"warning",
+                showConfirmButton:true,
+                showCancelButton:true,
+                confirmButtonText:"Si",
+                cancelButtonText:"No",
+                confirmButtonColor:"green",
+                cancelButtonColor:"red"
+            }).then(response=>{
+                if(!response.isConfirmed){
+                    window.location.href="/logout/"
+                }
+            })
+        }else{
+            window.location.href="/logout/"
+        }
+    })
 
+    //X
+    btnReg.addEventListener("click",function(e){
+        if(inputProductos.value!="" && inputCantidad.value>0){
+            Swal.fire({
+                title:"Advertencia",
+                text:`
+                Tiene un producto sin seleccionar:
+                ${inputProductos.value.split("-")[1]} cantidad ${inputCantidad.value}.
+                por favor borrelo o seleccionelo antes de registrar el pedido
+                `,
+                icon:"warning",
+                showConfirmButton: false,
+                timer:3000
+            })
+            e.preventDefault()
+        }
+    })
+
+    //X
     btnProductos.addEventListener("click",agregarProducto)
 
+    //X
     form.addEventListener("submit",function(e){
         e.preventDefault()
         let boton=document.activeElement;
@@ -620,14 +688,17 @@ document.addEventListener("DOMContentLoaded", function() {
     window.addEventListener("orientationchange",function(){
         if(modalPedidos.open){
             modalPedidos.close();
-            cargarPedidos();
+            mostrar_pedidos();
         }
-    });
+    })
 
     //agregamos la funcion de cerrar el modal
-    cerrarModal.addEventListener("click",function(){modalPedidos.close()});
+    cerrarModal.addEventListener("click",function(){
+        modalPedidos.close()
+        estadoInicial()
+    })
 
-    //Agregamos la funcion para abrir el modal y cargar pedidos
+    //X
     btnCargarPedidos.addEventListener("click",mostrar_pedidos);
 
     //Agregamos al input la funcion de filtrar pedidos

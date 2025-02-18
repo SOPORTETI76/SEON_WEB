@@ -17,7 +17,7 @@ def login(request):
                     request.session['usuario']=usuario
                     request.session['inic']=r_db['data']['inic']
                     request.session['nombre']=r_db['data']['nombre']
-                    return redirect("mis_pedidos")
+                    return redirect("vista_pedidos")
             front['errordb']="Usuario o contraseña incorrectos"
         else: front['form']=form
     return render(request,"index.html",front)

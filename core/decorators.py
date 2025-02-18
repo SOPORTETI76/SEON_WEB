@@ -12,6 +12,6 @@ def validar_login(vista_func):
 def restringir_login(vista_func):
     def wrapper(request,*args,**kwargs):
         if "usuario" in request.session:
-            return redirect("mis_pedidos")
+            return redirect("vista_pedidos")
         return vista_func(request,*args,**kwargs)
     return wrapper

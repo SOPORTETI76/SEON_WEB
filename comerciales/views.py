@@ -7,7 +7,7 @@ from core.decorators import validar_login
 from datetime import date
 
 @validar_login
-def mis_pedidos(request):
+def vista_pedidos(request):
     with sql_comerciales() as db:
         li_terceros=json.dumps(db.lista_terceros()['data'])
         li_productos=json.dumps(db.lista_productos()['data'])
@@ -46,7 +46,7 @@ def registrar_pedidos(request):
     return redirect("mis_pedidos")
 
 @validar_login
-def todos_pedidos(request):
+def pedidos_comercial(request):
     iniciales=request.session.get("inic")
     if not iniciales:
         return JsonResponse({"error":"usuario no encontrado"})

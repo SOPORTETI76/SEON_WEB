@@ -49,23 +49,25 @@
             </div>
             <div class="opc-productos">
                 {{ form.cantidad }}
-                <button title="Agregar producto" id="btn-productos" class="btn-productos" type="button">+</button>
+                <button title="Agregar producto" id="btn-productos" class="btn-productos" type="button">
+                    <img class="img-guardar" src="{% static 'IMG/guardar.png' %}" alt="Icono...">
+                </button>
             </div>
-            <h4 id="prod-ter-sel" >Productos seleccionados:</h4>
+            <h4 id="prod-ter-sel" hidden>Productos seleccionados:</h4>
             <div title="-> pedido-cantidad-producto <-" id="productos-selecionados" class="productos-tercero" data-img-url="{% static 'IMG/delete.png' %}" hidden>
                 <!--Productos seleccionados-->
             </div>
-            <h4 id="ped-ter-reg" >Pedidos registrados:</h4>
-            <div title="informacion (#pedido,cantidad,producto,orden)" id="pedidos-hechos" class="productos-tercero" hidden>
+            <h4 id="ped-ter-reg" hidden>Pedidos registrados:</h4>
+            <div title="informacion (cantidad,Producto,#Pedido)" style="display:none;" id="pedidos-hechos" class="productos-tercero"2>
                 <!--Pedidos realizados anteiormente-->
             </div>
             <hr>
             {{ form.orden_compra }}
             {{ form.observacion }}
             <div class="cont-btns">
-                <button id="btn-reg" type="submit" class="btn-all btn-pedido" name="accion" value="reg" style="display: none;">REGISTRAR</button>
+                <button id="btn-reg" type="submit" class="btn-all btn-pedido" name="accion" value="reg">REGISTRAR</button>
                 <button id="btn-act" type="submit" class="btn-all btn-pedido" name="accion" value="act" style="display: none;">ACTUALIZAR</button>
-                <a id="logout" href="{% url 'logout' %}" style="display: none;"><button id="btn-sal" class="btn-all btn-out" type="button"">CERRAR SESION</button></a>
+                <a id="logout" href="{% url 'logout' %}"><button id="btn-sal" class="btn-all btn-out" type="button"">CERRAR SESION</button></a>
                 <button id="btn-canc" type="button" class="btn-all btn-out" style="display: none;">CANCELAR</button>
             </div>
         </form>
@@ -88,13 +90,17 @@
         </div>
     </dialog>
     <dialog id="modalOpciones" class="ventana" close></dialog>
-    <script type="application/json" id="terceros-data">{{ li_terceros|safe }}</script>
-    <script type="aplication/json" id="productos-data">{{ li_productos|safe }}</script>
+    <script type="aplication/json" id="terceros-data">
+        {{ li_terceros|safe }}
+    </script>
+    <script type="aplication/json" id="productos-data">
+        {{ li_productos|safe }}
+    </script>
     <!--Flatpickr-->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
     <!-- SweetAlert2 CSS y JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="{% static 'JS/pedidos.js' %}"></script>
+    <script src="{% static 'JS/vista_pedidos.js' %}" defer></script>
 </body>
 </html>

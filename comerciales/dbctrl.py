@@ -115,7 +115,7 @@ class sql_comerciales(fb_sql):
 
     #Devuelve codigo y nombre de los productos en inventario
     def lista_productos(self)->dict:
-        query="SELECT CODPRO, NOMPRO FROM INVENTARIO WHERE CATEGORIA!='Z'"
+        query="SELECT CODPRO, NOMPRO FROM INVENTARIO WHERE CATEGORIA!='Z' AND GRUPO=2"
         result=self.buscar_todos(query)
         if result['estado']:
             productos={}
