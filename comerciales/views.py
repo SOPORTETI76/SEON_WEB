@@ -4,8 +4,8 @@ from django.shortcuts import render,redirect
 from .forms import pedidos_form
 from .dbctrl import sql_comerciales
 from core.decorators import validar_login
-from datetime import date
 
+#Renderiza la vista principal de los pedidos
 @validar_login
 def vista_pedidos(request):
     with sql_comerciales() as db:
@@ -20,6 +20,7 @@ def vista_pedidos(request):
             }
     return render(request,'pedido.html',front)
 
+#Actualiza la informacion de un pedido y recibe la informacion por javascript
 @validar_login
 def actualizar_pedidos(request):
     if request.method=="POST":
@@ -33,6 +34,7 @@ def actualizar_pedidos(request):
         return JsonResponse({"estado":resp["estado"],"mensaje":resp['error']})
     return redirect("mis_pedidos")
 
+#Recibe la lista de pedidos del front y los registra en la base de datos
 @validar_login
 def registrar_pedidos(request):
     if request.method=="POST":
@@ -45,6 +47,7 @@ def registrar_pedidos(request):
         return JsonResponse({"estado":resp["estado"],"mensaje":resp['error']})
     return redirect("mis_pedidos")
 
+#Busca los pedidos asociados a un solo comercial y los devuelve en formato JSON
 @validar_login
 def pedidos_comercial(request):
     iniciales=request.session.get("inic")
@@ -56,6 +59,7 @@ def pedidos_comercial(request):
         return JsonResponse(resp['data'],safe=False)
     return JsonResponse({"error":resp['error']})
 
+#Busca un pedido en especifico segun el ID y devuelve la informacion en formato JSON
 @validar_login
 def buscar_pedido(request,pedido_id):
     if pedido_id:
@@ -66,6 +70,7 @@ def buscar_pedido(request,pedido_id):
             return JsonResponse({'error':resp['error']},status=500)
     return JsonResponse({'error':'No se proporciono un id'},status=400)
 
+#Elimina un pedido segun su ID y responde en formato JSON
 @validar_login
 def eliminar_pedido(request):
     if request.method=="POST":
@@ -83,3 +88,20 @@ def eliminar_pedido(request):
         except Exception as e:
             return JsonResponse({"mensaje":str(e),"estado":False},status=500)
     return render(request,"")
+
+@validar_login
+def precio_producto(request):
+    front={"estado":False,"error":"GET"}
+    if request.method=="POST":
+        data=json.loads(request.body)
+        lista_base=data.get("lista_base")
+        id_producto=data.get("producto")
+        with sql_comerciales() as db:
+            resp=db.precio_producto(lista_base,id_producto)
+        if resp["estado"]:
+            front["estado"]=resp["estado"]
+            front["precio"]=resp["data"][0]
+            front["error"]=""
+            return JsonResponse(front,status=200)
+        front["error"]=resp["error"]
+    return JsonResponse(front,status=400)

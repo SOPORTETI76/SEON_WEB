@@ -99,15 +99,15 @@ class sql_comerciales(fb_sql):
 
     #Devuelve codigo, nit, nombre comercial y nombre de la sucursal de los terceros registrados
     def lista_terceros(self)->dict:
-        query="SELECT CODTER, NITTER, NOMCTER, NOM_COMER FROM TERCEROS WHERE TIPTER<>5 ORDER BY NOMCTER;"
+        query="SELECT CODTER, NITTER, NOMCTER, NOM_COMER, LISTA_BASE FROM TERCEROS WHERE TIPTER<>5 ORDER BY NOMCTER;"
         result=self.buscar_todos(query)
         if result['estado']:
             terceros={}
             for x in result['data']:
                 if x[3]=='' or x[3].startswith(" "):
-                    terceros[f'{x[0]}']=f'{x[0]}: {x[2]}'
+                    terceros[f'{x[0]}']=f'{x[0]}: {x[2]}-{x[4]}'
                 else:
-                    terceros[f'{x[0]}']=f'{x[0]}: {x[3]}'
+                    terceros[f'{x[0]}']=f'{x[0]}: {x[3]}-{x[4]}'
             result['data']=terceros
         else:
             result['data']=[("error",result['error'])]
@@ -124,3 +124,9 @@ class sql_comerciales(fb_sql):
             result['data']=productos
         else: result['data']=[("error",result['error'])]
         return result
+
+    #Busca el valor de un producto segun la lista base de un tercero
+    def precio_producto(self,lista_base:int,cod_producto:int)->dict:
+        query="SELECT PRE_PRVTA FROM PRECIOS WHERE PRE_CLIENTE=? AND PRE_PRODUCTO=?"
+        select=(lista_base,cod_producto)
+        return self.buscar_uno(query=query,params=select)

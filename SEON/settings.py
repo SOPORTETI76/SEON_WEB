@@ -27,10 +27,10 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    '2d12-186-31-88-250.ngrok-free.app'
+    '554c-186-31-88-250.ngrok-free.app'
 ]
 CSRF_TRUSTED_ORIGINS=[
-    'https://2d12-186-31-88-250.ngrok-free.app',
+    'https://554c-186-31-88-250.ngrok-free.app',
 ]
 
 

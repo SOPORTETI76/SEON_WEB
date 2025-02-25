@@ -2,7 +2,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="{% static 'CSS/pedidos.css' %}"/>
+    <!--<link rel="stylesheet" type="text/css" href="{% static 'CSS/pedidos.css' %}"/>-->
+    <link rel="stylesheet" type="text/css" href="{% static 'CSS/estilos.css' %}"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
@@ -10,68 +11,87 @@
     <title>Pedidos</title>
 </head>
 <body>
-    <div class="contenedor-principal">
-        <h2>DETALLES PEDIDO</h2>
-        <img src="{% static 'IMG/logo_pacos.png' %}" alt="..."/>
+    <nav class="barra-navegacion">
+        <img class="logo-pacos" src="{% static 'IMG/logo_pacos.png' %}" alt="..."/>
+        <h2 class="titulo" >DETALLES PEDIDO</h2>
+        <div class="cont-btn-nav">
+            <button id="btnHistorial" class="btn-nav btn-historial" type="button">HISTORIAL VENTAS</button>
+            <button id="btnMisPedidos" class="btn-nav btn-pedidos" type="button">HISTORIAL PEDIDOS</button>
+        </div>
+    </nav>
+    
+    <form id="form-pedidos" method="POST" class="form-pedidos">
+        {% csrf_token %}
         <h4 class="user-name">{{ usuario }}</h4>
-        <button id="btnMisPedidos" class="btn-all btn-modal" type="button">MIS PEDIDOS</button>
-        <form id="form-pedidos" method="POST">
-            <hr>
-            {% csrf_token %}
-            <input type="hidden" id="id_pedido" name="id_pedido" value="">
-            {% if form.errors %}
-                <div class="cont-error">
-                    Corrija los campos (
-                    {% for error in form.errors%}
-                        {{ error }}
-                    {% endfor %}
-                    )
-                </div>
-            {% endif %}
-            {% if error %}
-                <div class="cont-error">
+        <hr>
+        <input type="hidden" id="id_pedido" name="id_pedido" value="">
+        <input type="hidden" id="precio-producto" name="precio_producto" value="">
+        {% if form.errors %}
+            <div class="cont-error">
+                Corrija los campos (
+                {% for error in form.errors%}
                     {{ error }}
-                </div>
-            {% endif %}
-            {{ form.fecha }}
-            {{ form.terceros }}
-            <div class="custom-dropdown">
-                <div id="tercero-list" class="dropdown-list">
-                    <!--opciones-->
-                </div>
+                {% endfor %}
+                )
             </div>
-            <hr>
-            {{ form.productos }}
-            <div class="custom-dropdown">
-                <div id="producto-list" class="dropdown-list">
-                    <!--opciones-->
-                </div>
+        {% endif %}
+        {% if error %}
+            <div class="cont-error">
+                {{ error }}
             </div>
-            <div class="opc-productos">
-                {{ form.cantidad }}
-                <button title="Agregar producto" id="btn-productos" class="btn-productos" type="button">
-                    <img class="img-guardar" src="{% static 'IMG/guardar.png' %}" alt="Icono...">
-                </button>
+        {% endif %}
+        {{ form.fecha }}
+        {{ form.terceros }}
+        <div class="custom-dropdown">
+            <div id="tercero-list" class="dropdown-list">
+                <!--opciones-->
             </div>
-            <h4 id="prod-ter-sel" hidden>Productos seleccionados:</h4>
-            <div title="-> pedido-cantidad-producto <-" id="productos-selecionados" class="productos-tercero" data-img-url="{% static 'IMG/delete.png' %}" hidden>
-                <!--Productos seleccionados-->
+        </div>
+        <hr>
+        {{ form.productos }}
+        <div class="custom-dropdown">
+            <div id="producto-list" class="dropdown-list">
+                <!--opciones-->
             </div>
-            <h4 id="ped-ter-reg" hidden>Pedidos registrados:</h4>
-            <div title="informacion (cantidad,Producto,#Pedido)" style="display:none;" id="pedidos-hechos" class="productos-tercero"2>
-                <!--Pedidos realizados anteiormente-->
-            </div>
-            <hr>
-            {{ form.orden_compra }}
-            {{ form.observacion }}
-            <div class="cont-btns">
-                <button id="btn-reg" type="submit" class="btn-all btn-pedido" name="accion" value="reg">REGISTRAR</button>
-                <button id="btn-act" type="submit" class="btn-all btn-pedido" name="accion" value="act" style="display: none;">ACTUALIZAR</button>
-                <a id="logout" href="{% url 'logout' %}"><button id="btn-sal" class="btn-all btn-out" type="button"">CERRAR SESION</button></a>
-                <button id="btn-canc" type="button" class="btn-all btn-out" style="display: none;">CANCELAR</button>
-            </div>
-        </form>
-    </div>
+        </div>
+        <div class="info-producto" >
+            <label for="costo-unidad" class="costo-unidad-lb">Precio: </label>
+            <p id="costo-unidad" class="costo-unidad-p">$ 0</p>
+        </div>
+        <div class="cantidad-productos">
+            {{ form.cantidad }}
+            <label class="producto-total-lb" for="costo-p">Total:</label>
+            <p id="producto-total-p" class="producto-total-p">$ 0</p>
+            <button title="Agregar producto" id="btn-productos" class="btn-productos" type="button">
+                <img class="img-guardar" src="{% static 'IMG/guardar.png' %}" alt="Icono...">
+            </button>
+        </div>
+        <div class="cont-head-productos" style="display: none;">
+            <h4 id="prod-ter-sel" class="sel-productos-h4">Productos seleccionados</h4>
+            <label for="total-pedido" class="sel-productos-lb">Costo total: </label>
+            <p id="total-pedido" class="sel-productos-p">$ 0</p>
+        </div>
+        <div id="productos-selecionados" class="productos-tercero" data-img-url="{% static 'IMG/cancelar.png' %}">
+            <!--Productos seleccionados-->
+        </div>
+        <div class="cont-head-pedidos" style="display: none;">
+            <h4 id="ped-ter-h4" class="ped-ter-h4">Pedidos registrados</h4>
+            <label for="num-pedido" class="num-ped-lb">Numero de pedidos:</label>
+            <p id="num-pedido" class="num-ped-p">0</p>
+        </div>
+        <div id="pedidos-hechos" class="productos-tercero" data-img-url="{% static 'IMG/borrar.png' %}">
+            <!--Pedidos realizados anteiormente-->
+        </div>
+        <hr>
+        {{ form.orden_compra }}
+        {{ form.observacion }}
+        <div class="cont-btns">
+            <button id="btn-reg" type="submit" class="btns-form btn-pedido" name="accion" value="reg">REGISTRAR</button>
+            <button id="btn-act" type="submit" class="btns-form btn-pedido" name="accion" value="act" style="display: none;">ACTUALIZAR</button>
+            <a id="logout" href="{% url 'logout' %}"><button id="btn-sal" class="btns-form btn-out" type="button"">CERRAR SESION</button></a>
+            <button id="btn-canc" type="button" class="btns-form btn-out" style="display: none;">CANCELAR</button>
+        </div>
+    </form>
     <dialog id="modalPedidos" class="ventana-modal" close>
         <div class="contenido-modal">
             <div class="modal-header">

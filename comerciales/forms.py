@@ -6,12 +6,12 @@ class pedidos_form(forms.Form):
     terceros=forms.CharField(
         label="",
         required=True,
-        widget=forms.TextInput(attrs={"placeholder":"Buscar tercero","class":"inp-pedido","autocomplete":"off","name":"off"})     
+        widget=forms.TextInput(attrs={"placeholder":"Buscar tercero","class":"inp-pedido","autocomplete":"off","name":"off","style":"background-color:gray;","readonly":"readonly"})     
     )
     productos=forms.CharField(
         label="",
         required=False,
-        widget=forms.TextInput(attrs={"placeholder":"Buscar producto","class":"inp-pedido","autocomplete":"off","name":"off"})
+        widget=forms.TextInput(attrs={"placeholder":"Buscar producto","class":"inp-pedido","autocomplete":"off","name":"off","readonly":"readonly","style":"background-color:gray;"})
     )
 
     cantidad=forms.IntegerField(
