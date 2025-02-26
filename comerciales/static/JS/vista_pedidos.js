@@ -17,6 +17,7 @@ let productos_seleccionados=form_pedidos.querySelector("#productos-selecionados"
 let total_pedido_p=form_pedidos.querySelector("#total-pedido")
 let head_ped_ter=form_pedidos.querySelector(".cont-head-pedidos")
 let pedidos_terceros=form_pedidos.querySelector("#pedidos-hechos")
+let num_pedidos=form_pedidos.querySelector("#num-pedidos")
 let orden_compra=form_pedidos.querySelector("#id_orden_compra")
 let observacion=form_pedidos.querySelector("#id_observacion")
 let btn_registrar=form_pedidos.querySelector("#btn-reg")
@@ -94,7 +95,9 @@ function estado_defecto(){
     pedidos_terceros.innerHTML=""
     orden_compra.value=""
     observacion.value=""
+    btn_mis_pedidos.style=""
     acceso_formulario()
+    campos_productos_pedidos()
 }
 
 //Esta funcion controla el comportamiento del formulario dependiendo de que haga el usuario
@@ -162,12 +165,16 @@ function acceso_formulario(){
         precio_p.style.color=""
         total_productos_p.textContent="$ 0"
     }
-    campos_productos_pedidos()
 }
 
 /*Esta funcion valida si existen pedidos para el tercero seleccionado o si existen
 productos seleccionados para mostrar u ocultar los campos*/
 function campos_productos_pedidos(){
+    if(id_pedido.value!==""){
+        head_ped_ter.style.display="none"
+        pedidos_terceros.style.display="none"
+        return
+    }
     if(productos_seleccionados.childElementCount>0){
         productos_seleccionados.style=""
         productos_head.style=""
@@ -178,9 +185,11 @@ function campos_productos_pedidos(){
     if(pedidos_terceros.childElementCount>0){
         head_ped_ter.style=""
         pedidos_terceros.style=""
+        num_pedidos.textContent=pedidos_terceros.childElementCount
     }else{
         head_ped_ter.style.display="none"
         pedidos_terceros.style.display="none"
+        num_pedidos.textContent=0
     }
 }
 
@@ -272,7 +281,6 @@ function total_productos(){
     }else{
         total_productos_p.textContent="$ 0"
     }
-    
 }
 
 //Se encarga de sumar el valor de los productos seleccionados
@@ -293,6 +301,10 @@ function total_pedido(){
 //Filtra los pedidos ya registrados segun la fecha y tercero seleccionado
 function pedidos_por_tercero(valueTercero){
     pedidos_terceros.innerHTML=""
+    if(id_pedido.value!==""){
+        campos_productos_pedidos()
+        return
+    }
     if(pedidos_comercial){
         let iconUrl=pedidos_terceros.getAttribute("data-img-url")
         pedidos_comercial.forEach(pedido=>{
@@ -366,6 +378,7 @@ function seleccionar_productos(){
     img.addEventListener("click",function(){
         let nodoPadre=img.parentNode
         productos_seleccionados.removeChild(nodoPadre)
+        campos_productos_pedidos()
         acceso_formulario()
         total_pedido()
     })
@@ -384,6 +397,7 @@ function seleccionar_productos(){
     })
     producto.value=""
     cantidad.value=""
+    campos_productos_pedidos()
     total_pedido()
     acceso_formulario()
 }
@@ -530,6 +544,26 @@ function actualizar_pedido(){
     })
 }
 
+//Valida los campos necesarios para actualizar un producto
+function validar_actualizacion(){
+    let flagFecha=fecha.value===""
+    let flagProducto=producto.value===""
+    let flagCantidad=cantidad.value<=0
+    let flagCons=id_pedido.value===""
+    let prodNoExiste=!Object.values(data_productos).includes(producto.value)
+    if (flagFecha || flagProducto || flagCantidad || flagCons || prodNoExiste){
+        Swal.fire({
+            title: "Error",
+            text: "Valide que los campos esten completos o el nombre del producto sea correcto",
+            icon: "error",
+            showConfirmButton:false,
+            timer:1300
+        })
+        return true
+    }
+    return false
+}
+
 //Elimina el pedido seleccionado segun su ID
 async function eliminar_pedido(pedidoId,llamado,nodo_padre=null){
     if(llamado==="vmodal") ventana_modal.close()
@@ -575,26 +609,6 @@ async function eliminar_pedido(pedidoId,llamado,nodo_padre=null){
     )
 }
 
-//Valida los campos necesarios para actualizar un producto
-function validar_actualizacion(){
-    let flagFecha=fecha.value===""
-    let flagProducto=producto.value===""
-    let flagCantidad=cantidad.value<=0
-    let flagCons=id_pedido.value===""
-    let prodNoExiste=!Object.values(data_productos).includes(producto.value)
-    if (flagFecha || flagProducto || flagCantidad || flagCons || prodNoExiste){
-        Swal.fire({
-            title: "Error",
-            text: "Valide que los campos esten completos o el nombre del producto sea correcto",
-            icon: "error",
-            showConfirmButton:false,
-            timer:1300
-        })
-        return true
-    }
-    return false
-}
-
 //Atrapa y devuelve el valor del CSRF TOKEN necesario para la validacion entre cliente servidor
 function getCSRFToken(){
     return document.querySelector('[name=csrfmiddlewaretoken]').value
@@ -626,6 +640,7 @@ function pedidos_vista_escritorio(){
                     </tr>`
     
     pedidos_comercial.forEach(pedido=>{
+        let b_enabled=pedido.despacho>0 ? 'disabled="" style="background-color:gray;"':''
         let fila=`
             <tr id="${pedido.id}:${pedido.tercero}:${pedido.producto}">
                 <td>${pedido.id}</td>
@@ -637,8 +652,8 @@ function pedidos_vista_escritorio(){
                 <td>${pedido.ord_compra}</td>
                 <td>${pedido.obs}</td>
                 <td>
-                    <button type="button" class="btns-tabla btn-tabla-editar btn-func-editar" data-id="${pedido.id}">Editar</button>
-                    <button type="button" class="btns-tabla btn-tabla-eliminar btn-func-eliminar" data-id="${pedido.id}">Eliminar</button>
+                    <button ${b_enabled} type="button" class="btns-tabla btn-tabla-editar btn-func-editar" data-id="${pedido.id}">Editar</button>
+                    <button ${b_enabled} type="button" class="btns-tabla btn-tabla-eliminar btn-func-eliminar" data-id="${pedido.id}">Eliminar</button>
                 </td>
             </tr>
             `
@@ -714,6 +729,9 @@ function buscar_pedido(pedidoId){
             orden_compra.value=pedido.ord_compra
             observacion.value=pedido.obs
             ventana_modal.close()
+            precio_producto.value=pedido.lista_base
+            obtener_precio(pedido.producto.split("-")[0])
+            campos_productos_pedidos()
             acceso_formulario()
         }
     ).catch(error =>console.error("Error: ",error))
@@ -781,7 +799,7 @@ btn_cerrar_sesion.addEventListener("click",function(e){
     if(productos_seleccionados.childElementCount>0){
         Swal.fire({
             title:"Advertencia",
-            text:"Aun tiene productos seleccionados, ¿desea registrarlos?",
+            text:"Aun tiene productos seleccionados, ¿desea registrarlos antes de cerrar sesion?",
             icon:"warning",
             showConfirmButton:true,
             showCancelButton:true,
@@ -837,12 +855,15 @@ btn_cancelar.addEventListener("click",cancelar_editar)
 
 //Agregamos la funcion de acceso formulario al evento "change" del input de fecha
 fecha.addEventListener("change",()=>{
-    if(tercero.value!==""){
-        pedidos_por_tercero(tercero.value)
+    if(id_pedido.value===""){
+        if(tercero.value!==""){
+            pedidos_por_tercero(tercero.value)
+        }
     }
     acceso_formulario()
 })
 
+//Agregamos la funcion de acceso formulario al evento "change" del input de terceros
 tercero.addEventListener("change",acceso_formulario)
 
 //Agregamos la funcion de acceso formulario al evento "change" del input de producto

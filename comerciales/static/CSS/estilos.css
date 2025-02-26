@@ -63,9 +63,18 @@ body{
 .btn-nav:before{
     background-color: #FF8300;
 }
+@media(max-width:740px){
+    .form-pedidos{
+        width: 90%;
+    }
+}
+@media(min-width:740px){
+    .form-pedidos{
+        width: 40%;
+    }
+}
 .form-pedidos{
-    margin: 5vh;
-    width: 90%;
+    margin: 5vw;
     display: flex;
     flex-direction: column;
     background-color: rgba(0, 0, 0, 0.87);
@@ -390,11 +399,11 @@ body{
     grid-row-start: 4;
 }
 .btn-del-pedido{
-    margin: 2px;
+    margin-left: 5px;
     width: 40px;
     height: 40px;
     align-self: center;
-    justify-self: center;
+    justify-self: right;
     grid-column-start: 3;
     grid-row-start: 2;
     grid-row-end: span 3;

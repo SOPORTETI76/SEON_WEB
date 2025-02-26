@@ -69,7 +69,7 @@ class sql_comerciales(fb_sql):
         query='''
         SELECT
             p.PED_CONSEC,p.PED_CODTER,t.NOMCTER,t.NOM_COMER,p.PED_CODPRO,i.NOMPRO,p.PED_CANTID,
-            p.PED_DESPACHO,p.PED_FECHA,P.PED_ORCOMPRA,p.PED_OBSERVA
+            p.PED_DESPACHO,p.PED_FECHA,P.PED_ORCOMPRA,p.PED_OBSERVA,t.LISTA_BASE
         FROM PEDIDOS p
             LEFT JOIN TERCEROS t ON p.PED_CODTER = t.CODTER
             LEFT JOIN INVENTARIO i ON p.PED_CODPRO = i.CODPRO
@@ -86,7 +86,8 @@ class sql_comerciales(fb_sql):
                 "despacho":resp['data'][7],
                 "fecha":resp['data'][8],
                 "ord_compra":resp['data'][9],
-                "obs":resp['data'][10]
+                "obs":resp['data'][10],
+                "lista_base":resp["data"][11]
             }
             resp['data']=pedido
         return resp
