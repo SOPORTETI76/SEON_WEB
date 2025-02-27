@@ -665,6 +665,7 @@ function pedidos_vista_escritorio(){
 function pedidos_vista_movil(){
     cuerpo_tabla.innerHTML+="<tr class='tr-small-head'><th class='th-small'>Informacion</th></tr>"
     pedidos_comercial.forEach(pedido=>{
+        let b_enabled=pedido.despacho>0 ? 'disabled="" style="background-color:gray;"':''
         let fila=`
         <tr id="${pedido.id}:${pedido.tercero}:${pedido.producto}" class="tr-small-body">
             <th class="th-small">
@@ -676,7 +677,7 @@ function pedidos_vista_movil(){
                 <p class="phead" style="grid-row-start: 6">Fecha:</p>
                 <p class="phead" style="grid-row-start: 7">Orden compra:</p>
                 <p class="phead" style="grid-row-start: 8">Observacion: </p>
-                <button style="grid-row-start: 9" type="button" class="btns-tabla btn-tabla-eliminar btn-func-eliminar" data-id="${pedido.id}">Eliminar</button>
+                <button ${b_enabled} style="grid-row-start: 9" type="button" class="btns-tabla btn-tabla-eliminar btn-func-eliminar" data-id="${pedido.id}">Eliminar</button>
                 <p id="idPedido" class="pinf" style="grid-row-start: 1">${pedido.id}</p>
                 <p id="idPedido" class="pinf" style="grid-row-start: 2">${pedido.tercero}</p>
                 <p class="pinf" style="grid-row-start: 3">${pedido.producto}</p>
@@ -685,7 +686,7 @@ function pedidos_vista_movil(){
                 <p class="pinf" style="grid-row-start: 6"">${pedido.fecha}</p>
                 <p class="pinf" style="grid-row-start: 7">${pedido.ord_compra}</p>
                 <p class="pinf" style="grid-row-start: 8">${pedido.obs}</p>
-                <button style="grid-row-start: 9" type="button" class="btns-tabla btn-tabla-editar btn-func-editar" data-id="${pedido.id}">Editar</button>
+                <button ${b_enabled} style="grid-row-start: 9" type="button" class="btns-tabla btn-tabla-editar btn-func-editar" data-id="${pedido.id}">Editar</button>
             </th>
         </tr>
         `

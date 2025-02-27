@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registros de Báscula</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'CSS/registro_bas.css' %}">
+    <link rel="icon" type="image/png" href="{% static 'IMG/Logo_Pacos.jpg' %}">
+</head>
+<body> 
+    <header>
+        <div class="home-icon-container">
+            <a href="{% url 'bascula_view' %}">
+                <img class="home-icon" src="{% static 'IMG/regreso.png' %}" alt="Regresar">
+            </a>
+        </div>
+        <h1>Registros de Pesaje</h1>
+        <div class="home-icon-container">
+            <a href="{% url 'menu_rutinas' %}">
+                <img class="home-icon" src="{% static 'IMG/casa-de-perro.png' %}" alt="Menú">
+            </a>
+        </div>
+    </header>
+
+    <br><br>
+
+    <section>
+        <form method="get">
+            <input type="text" name="q" placeholder="Buscar por peso, dato o fecha" value="{{ query }}" onfocus="selectText(this)">
+            <input type="date" name="fecha" value="{{ filtro_fecha }}">
+            <button type="submit">Buscar 🔎</button>   
+        </form>
+    </section>
+
+    <br>
+
+    <section>
+        <div class="encabezado-registro">
+            <h2>Registros de Báscula</h2>
+            <button id="eliminar-btn" class="btn-eliminar">Eliminar Seleccionados</button>
+        </div>
+
+        <table class="registro-bascula">
+            <thead>
+                <tr>
+                    <th>Seleccionar</th>
+                    <th>Peso (Kg)</th>
+                    <th>Fecha y Hora</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for registro in registros_bascula %}
+                <tr>
+                    <td><input type="checkbox" class="registro-checkbox-bascula" value="{{ registro.id }}"></td>
+                    <td>{{ registro.peso }}</td>
+                    <td>{{ registro.fecha }}</td>
+                    <td>
+                        <button class="btn-editar" data-id="{{ registro.id }}" data-url="{% url 'editar_registro' 'bascula' registro.id %}" data-tipo="bascula">Editar</button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="dato">No hay registros... ☠️</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+    <br>
+
+    <section>
+        <h2>Registro de Otro Dispositivo</h2>
+        <table class="registro-dispositivo">
+            <thead>
+                <tr>
+                    <th>Seleccionar</th>
+                    <th>Datos</th>
+                    <th>Fecha y Hora</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for registro in registros_dispositivo %}
+                <tr>
+                    <td><input type="checkbox" class="registro-checkbox-dispositivo" value="{{ registro.id }}"></td>
+                    <td>{{ registro.datos }}</td>
+                    <td>{{ registro.fecha }}</td>
+                    <td>
+                        <button class="btn-editar" data-id="{{ registro.id }}" data-url="{% url 'editar_registro' 'dispositivo' registro.id %}" data-tipo="dispositivo">Editar</button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="dato">No hay registros... ☠️</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+       <!-- Modal para Editar Registro -->
+
+    <div id="modal-editar" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3>Editar Registro</h3>
+            <form method="post" id="editar-form">
+                {% csrf_token %}
+                <div id="campo-peso">
+                    <label for="peso">Peso (Kg):</label>
+                    <input type="text" id="peso" name="peso" onfocus="selectText(this)">
+                </div>
+                
+                <input type="hidden" name="registro_id" id="registro_id">
+                <input type="hidden" name="tipo_registro" id="tipo_registro">
+
+                <div id="campo-datos" style="display: none;">
+                    <label for="datos">Datos:</label>
+                    <input type="text" id="datos" name="datos" onfocus="selectText(this)">
+                </div>
+
+                <label for="codigo_proveedor">Código de Proveedor:</label>
+                <input type="text" id="codigo_proveedor" name="codigo_proveedor" onfocus="selectText(this)">
+
+                <label for="proveedor">Proveedor:</label>
+                <input type="text" id="proveedor" name="proveedor" onfocus="selectText(this)">
+
+                <label for="producto">Producto:</label>
+                <input type="text" id="producto" name="producto" onfocus="selectText(this)">
+
+                <label for="lote">Lote:</label>
+                <input type="text" id="lote" name="lote" onfocus="selectText(this)">
+
+                <label for="fecha_ven">Fecha de Vencimiento:</label>
+                <input type="date" id="fecha_vencimiento" name="fecha_ven">
+
+                <button type="submit" class="btn-guardar">Guardar Cambios</button>
+                <button type="button" id="imprimir-btn" class="btn-imprimir">Imprimir</button>
+            </form>
+        </div>
+    </div>
+
+
+    <br>
+
+    <input type="hidden" id="eliminarRegistrosUrl" value="{% url 'eliminar_registros' %}">
+    <script src="{% static 'JS/bascula.js' %}"></script>
+</body>
+</html>

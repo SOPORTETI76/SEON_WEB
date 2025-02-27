@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'usuarios',
     'comerciales',
+    'produccion',
     'core'
 ]
 
@@ -129,7 +130,6 @@ USE_I18N = True  # Habilita la internacionalización
 USE_L10N = True  # Usa formatos locales en números y fechas
 
 USE_TZ = True    # Usa soporte para zonas horarias
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/

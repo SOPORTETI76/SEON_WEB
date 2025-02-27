@@ -1,0 +1,7 @@
+asgiref==3.8.1
+Django==5.1.6
+fdb==2.0.2
+future==1.0.0
+pyserial==3.5
+python-decouple==3.8
+sqlparse==0.5.3
